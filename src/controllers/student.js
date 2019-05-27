@@ -2,7 +2,9 @@ function addStudent(req, res) {}
 
 function getStudent(req, res) {}
 
-function getAllStudents(req, res) {}
+function getAllStudents(req, res) {
+  res.send('working');
+}
 
 function updateStudent(req, res) {}
 
