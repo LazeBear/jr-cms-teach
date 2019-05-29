@@ -63,6 +63,8 @@ async function addCourse(req, res) {
     return res.status(404).json('student or course not found');
   }
   student.courses.addToSet(course._id);
+  course.students.addToSet(student._id);
+  await course.save();
   await student.save();
   return res.json(student);
 }
@@ -79,6 +81,8 @@ async function deleteCourse(req, res) {
   if (student.courses.length === oldCount) {
     return res.status(404).json('Enrolment does not exist');
   }
+  course.students.pull(student._id);
+  await course.save();
   await student.save();
   return res.json(student);
 }
