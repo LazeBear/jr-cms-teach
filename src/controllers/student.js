@@ -67,11 +67,28 @@ async function addCourse(req, res) {
   return res.json(student);
 }
 
+async function deleteCourse(req, res) {
+  const { id, code } = req.params;
+  const student = await Student.findById(id);
+  const course = await Course.findById(code);
+  if (!student || !course) {
+    return res.status(404).json('student or course not found');
+  }
+  const oldCount = student.courses.length;
+  student.courses.pull(course._id);
+  if (student.courses.length === oldCount) {
+    return res.status(404).json('Enrolment does not exist');
+  }
+  await student.save();
+  return res.json(student);
+}
+
 module.exports = {
   addStudent,
   getAllStudents,
   getStudent,
   updateStudent,
   deleteStudent,
-  addCourse
+  addCourse,
+  deleteCourse
 };
