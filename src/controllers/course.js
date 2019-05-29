@@ -45,7 +45,14 @@ async function updateCourse(req, res) {
   return res.json(newCourse);
 }
 
-function deleteCourse(req, res) {}
+async function deleteCourse(req, res) {
+  const { id: code } = req.params;
+  const course = await Course.findByIdAndDelete(code);
+  if (!course) {
+    return res.status(404).json('course not found');
+  }
+  return res.sendStatus(200);
+}
 
 module.exports = {
   addCourse,
