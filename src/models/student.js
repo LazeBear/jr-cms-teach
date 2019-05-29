@@ -4,7 +4,9 @@ const Joi = require('@hapi/joi');
 const schema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    minlength: 2
   },
   lastName: {
     type: String,
