@@ -15,6 +15,7 @@ const schema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
     __v: { type: Number, select: false }, // hide version
     createdAt: { type: Date, select: false }
   },

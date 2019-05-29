@@ -15,7 +15,10 @@ async function addCourse(req, res) {
 async function getCourse(req, res) {
   const { id: code } = req.params;
 
-  const course = await Course.findById(code);
+  const course = await Course.findById(code).populate(
+    'students',
+    'firstName lastName'
+  );
 
   if (!course) {
     return res.status(404).json('course not found');
