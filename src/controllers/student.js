@@ -52,6 +52,11 @@ async function deleteStudent(req, res) {
   if (!student) {
     return res.status(404).json('student not found');
   }
+  // clean the refs
+  await Course.updateMany(
+    { _id: { $in: student.courses } },
+    { $pull: { students: student._id } }
+  );
   return res.sendStatus(200);
 }
 

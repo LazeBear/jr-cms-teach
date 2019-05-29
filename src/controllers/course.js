@@ -1,4 +1,5 @@
 const Course = require('../models/course');
+const Student = require('../models/student');
 
 async function addCourse(req, res) {
   const { name, code, description } = req.body;
@@ -54,6 +55,17 @@ async function deleteCourse(req, res) {
   if (!course) {
     return res.status(404).json('course not found');
   }
+  // clean the refs
+  await Student.updateMany(
+    {
+      courses: course._id
+    },
+    {
+      $pull: {
+        courses: course._id
+      }
+    }
+  );
   return res.sendStatus(200);
 }
 
