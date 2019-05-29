@@ -19,7 +19,8 @@ const schema = new mongoose.Schema({
       validator: email => !Joi.validate(email, Joi.string().email()).error,
       msg: 'Invalid email format'
     }
-  }
+  },
+  courses: [{ type: String, ref: 'Course' }]
 });
 
 const model = mongoose.model('Student', schema);

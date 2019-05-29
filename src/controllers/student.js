@@ -1,4 +1,5 @@
 const Student = require('../models/student');
+const Course = require('../models/course');
 
 async function addStudent(req, res) {
   const { firstName, lastName, email } = req.body;
@@ -54,10 +55,23 @@ async function deleteStudent(req, res) {
   return res.sendStatus(200);
 }
 
+async function addCourse(req, res) {
+  const { id, code } = req.params;
+  const course = await Course.findById(code);
+  const student = await Student.findById(id);
+  if (!student || !course) {
+    return res.status(404).json('student or course not found');
+  }
+  student.courses.addToSet(course._id);
+  await student.save();
+  return res.json(student);
+}
+
 module.exports = {
   addStudent,
   getAllStudents,
   getStudent,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  addCourse
 };
