@@ -28,7 +28,22 @@ async function getAllCourses(req, res) {
   return res.json(courses);
 }
 
-function updateCourse(req, res) {}
+async function updateCourse(req, res) {
+  const { id: code } = req.params;
+  const { name, description } = req.body;
+  const newCourse = await Course.findByIdAndUpdate(
+    code,
+    { name, description },
+    {
+      new: true // return the updated object
+      // runValidators: true // run validator against new value
+    }
+  );
+  if (!newCourse) {
+    return res.status(404).json('course not found');
+  }
+  return res.json(newCourse);
+}
 
 function deleteCourse(req, res) {}
 
