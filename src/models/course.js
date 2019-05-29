@@ -4,7 +4,8 @@ const schema = new mongoose.Schema(
   {
     _id: {
       type: String,
-      uppercase: true
+      uppercase: true,
+      alias: 'code' // virtual `code` property
     },
     name: {
       type: String,
@@ -14,20 +15,17 @@ const schema = new mongoose.Schema(
       type: String,
       default: ''
     },
-    __v: { type: Number, select: false }
+    __v: { type: Number, select: false }, // hide version
+    createdAt: { type: Date, select: false }
   },
   {
-    timestamps: true,
+    timestamps: true, // show timestamp
     toJSON: {
-      virtuals: true
+      virtuals: true // required to show 'code' property
     },
-    id: false
+    id: false // hide `id` virtual property
   }
 );
-
-schema.virtual('code').get(function() {
-  return this._id;
-});
 
 const model = mongoose.model('Course', schema);
 

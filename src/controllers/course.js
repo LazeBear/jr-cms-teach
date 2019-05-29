@@ -2,7 +2,7 @@ const Course = require('../models/course');
 
 async function addCourse(req, res) {
   const course = new Course({
-    _id: 'ABC124',
+    code: 'EFG3',
     name: 'Intro to Web',
     description: 'intro'
   });
