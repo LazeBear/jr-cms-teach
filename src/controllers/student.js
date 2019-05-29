@@ -1,25 +1,58 @@
 const Student = require('../models/student');
 
 async function addStudent(req, res) {
+  const { firstName, lastName, email } = req.body;
+
   const student = new Student({
-    firstName: 'a',
-    lastName: 'b',
-    email: '123@test.com'
+    firstName,
+    lastName,
+    email
   });
   await student.save();
   return res.json(student);
 }
 
-function getStudent(req, res) {}
+async function getStudent(req, res) {
+  const { id } = req.params;
+
+  const student = await Student.findById(id);
+
+  if (!student) {
+    return res.status(404).json('student not found');
+  }
+  return res.json(student);
+}
 
 async function getAllStudents(req, res) {
   const students = await Student.find();
   return res.json(students);
 }
 
-function updateStudent(req, res) {}
+async function updateStudent(req, res) {
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+  const newStudent = await Student.findByIdAndUpdate(
+    id,
+    { firstName, lastName, email },
+    {
+      new: true // return the updated object
+      // runValidators: true // run validator against new value
+    }
+  );
+  if (!newStudent) {
+    return res.status(404).json('course not found');
+  }
+  return res.json(newStudent);
+}
 
-function deleteStudent(req, res) {}
+async function deleteStudent(req, res) {
+  const { id } = req.params;
+  const student = await Student.findByIdAndDelete(id);
+  if (!student) {
+    return res.status(404).json('student not found');
+  }
+  return res.sendStatus(200);
+}
 
 module.exports = {
   addStudent,
