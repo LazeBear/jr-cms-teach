@@ -12,7 +12,16 @@ async function addCourse(req, res) {
   return res.json(course);
 }
 
-function getCourse(req, res) {}
+async function getCourse(req, res) {
+  const { id: code } = req.params;
+
+  const course = await Course.findById(code);
+
+  if (!course) {
+    return res.status(404).json('course not found');
+  }
+  return res.json(course);
+}
 
 async function getAllCourses(req, res) {
   const courses = await Course.find();
