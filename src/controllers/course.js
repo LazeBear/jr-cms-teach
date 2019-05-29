@@ -1,9 +1,20 @@
-function addCourse(req, res) {}
+const Course = require('../models/course');
+
+async function addCourse(req, res) {
+  const course = new Course({
+    _id: 'ABC124',
+    name: 'Intro to Web',
+    description: 'intro'
+  });
+  await course.save();
+  return res.json(course);
+}
 
 function getCourse(req, res) {}
 
-function getAllCourses(req, res) {
-  res.send('working');
+async function getAllCourses(req, res) {
+  const courses = await Course.find();
+  return res.json(courses);
 }
 
 function updateCourse(req, res) {}
