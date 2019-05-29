@@ -1,10 +1,12 @@
 const Course = require('../models/course');
 
 async function addCourse(req, res) {
+  const { name, code, description } = req.body;
+
   const course = new Course({
-    code: 'EFG3',
-    name: 'Intro to Web',
-    description: 'intro'
+    name,
+    code,
+    description
   });
   await course.save();
   return res.json(course);
