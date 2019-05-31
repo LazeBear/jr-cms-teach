@@ -16,7 +16,9 @@ async function addStudent(req, res) {
 async function getStudent(req, res) {
   const { id } = req.params;
 
-  const student = await Student.findById(id).populate('courses', 'code name');
+  const student = await Student.findById(id)
+    .populate('courses', 'code name')
+    .exec();
 
   if (!student) {
     return res.status(404).json('student not found');
@@ -25,7 +27,7 @@ async function getStudent(req, res) {
 }
 
 async function getAllStudents(req, res) {
-  const students = await Student.find();
+  const students = await Student.find().exec();
   return res.json(students);
 }
 
@@ -39,7 +41,7 @@ async function updateStudent(req, res) {
       new: true // return the updated object
       // runValidators: true // run validator against new value
     }
-  );
+  ).exec();
   if (!newStudent) {
     return res.status(404).json('course not found');
   }
@@ -48,7 +50,7 @@ async function updateStudent(req, res) {
 
 async function deleteStudent(req, res) {
   const { id } = req.params;
-  const student = await Student.findByIdAndDelete(id);
+  const student = await Student.findByIdAndDelete(id).exec();
   if (!student) {
     return res.status(404).json('student not found');
   }
@@ -56,14 +58,14 @@ async function deleteStudent(req, res) {
   await Course.updateMany(
     { _id: { $in: student.courses } },
     { $pull: { students: student._id } }
-  );
+  ).exec();
   return res.sendStatus(200);
 }
 
 async function addCourse(req, res) {
   const { id, code } = req.params;
-  const course = await Course.findById(code);
-  const student = await Student.findById(id);
+  const course = await Course.findById(code).exec();
+  const student = await Student.findById(id).exec();
   if (!student || !course) {
     return res.status(404).json('student or course not found');
   }
@@ -76,8 +78,8 @@ async function addCourse(req, res) {
 
 async function deleteCourse(req, res) {
   const { id, code } = req.params;
-  const student = await Student.findById(id);
-  const course = await Course.findById(code);
+  const student = await Student.findById(id).exec();
+  const course = await Course.findById(code).exec();
   if (!student || !course) {
     return res.status(404).json('student or course not found');
   }
