@@ -6,10 +6,11 @@ async function loginUser(req, res) {
 
   const existingUser = await User.findOne({ username }).exec();
   if (!existingUser) {
-    return res.json('Invalid username or password');
+    return res.status(401).json('Invalid username or password');
   }
-  if (existingUser.password !== password) {
-    return res.json('Invalid username or password');
+  const validPassword = await existingUser.validatePassword(password);
+  if (!validPassword) {
+    return res.status(401).json('Invalid username or password');
   }
 
   const token = generateToken(existingUser._id);
